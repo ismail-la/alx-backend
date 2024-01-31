@@ -25,7 +25,7 @@ class LFUCache(BaseCaching):
         Adds an item in the cache
         """
         if key is not None and item is not None:
-            key_Out = self._balance(key)
+            key_Out = self.balance_items(key)
             with self.__rlock:
                 self.cache_data.update({key: item})
             if key_Out is not None:
@@ -41,7 +41,7 @@ class LFUCache(BaseCaching):
                 self.__stats[key] += 1
         return value
 
-    def _balance(self, key_In):
+    def balance_items(self, key_In):
         """Reorders the items.
         Removes the earliest items from the cache at the MAX size.
         """
