@@ -25,7 +25,7 @@ class LFUCache(BaseCaching):
         Adds an item in the cache
         """
         if key is not None and item is not None:
-            keyOut = self._balance(key)
+            keyOut = self._balance_items(key)
             with self.__rlock:
                 self.cache_data.update({key: item})
             if keyOut is not None:
