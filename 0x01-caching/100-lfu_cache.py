@@ -1,28 +1,28 @@
 #!/usr/bin/python3
-"""LFU Cache Replacement Implementation Class
+"""(LFU)Least Frequently Used caching module.
+A class LFUCache that inherits from BaseCaching and is a caching system.
 """
-from threading import RLock
 
+from threading import RLock
 BaseCaching = __import__('base_caching').BaseCaching
 
 
 class LFUCache(BaseCaching):
-    """
-    An implementaion of LFUCache(Least frequently used)
-
-    Attributes:
-        __stats (list): A dictionary of cache keys for access count
-        __rlock (RLock): Lock accessed resources to prevent race condition
+    """An implementaion of LFUCache.
+    it represents an object that allows storing and gets items from
+    a dictionary with a LFU removal mechanism when the limit is reached.
     """
     def __init__(self):
-        """ Instantiation method, sets instance attributes
+        """
+        Initializes the cache.
         """
         super().__init__()
         self.__stats = {}
         self.__rlock = RLock()
 
     def put(self, key, item):
-        """ Add an item in the cache
+        """ 
+        Adds an item in the cache
         """
         if key is not None and item is not None:
             keyOut = self._balance(key)
@@ -32,7 +32,8 @@ class LFUCache(BaseCaching):
                 print('DISCARD: {}'.format(keyOut))
 
     def get(self, key):
-        """ Get an item by key
+        """ 
+        Get an item by key.
         """
         with self.__rlock:
             value = self.cache_data.get(key, None)
@@ -40,15 +41,16 @@ class LFUCache(BaseCaching):
                 self.__stats[key] += 1
         return value
 
-    def _balance(self, keyIn):
-        """ Removes the earliest item from the cache at MAX size
+    def _balance_items(self, keyIn):
+        """Reorders the items.
+        Removes the earliest items from the cache at the MAX size.
         """
-        keyOut = None
+        key_Out = None
         with self.__rlock:
-            if keyIn not in self.__stats:
+            if key_In not in self.__stats:
                 if len(self.cache_data) == BaseCaching.MAX_ITEMS:
-                    keyOut = min(self.__stats, key=self.__stats.get)
-                    self.cache_data.pop(keyOut)
-                    self.__stats.pop(keyOut)
-            self.__stats[keyIn] = self.__stats.get(keyIn, 0) + 1
-        return keyOut
+                    key_Out = min(self.__stats, key=self.__stats.get)
+                    self.cache_data.pop(key_Out)
+                    self.__stats.pop(key_Out)
+            self.__stats[key_In] = self.__stats.get(key_In, 0) + 1
+        return key_Out
