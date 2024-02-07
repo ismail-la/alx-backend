@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Basic Flask application with Parametrize templates.
 """
-
 from flask import Flask, render_template, request
 from flask_babel import Babel
 
@@ -9,7 +8,6 @@ from flask_babel import Babel
 class Config:
     """Flask Babel config class.
     """
-
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
     BABEL_DEFAULT_TIMEZONE = "UTC"
